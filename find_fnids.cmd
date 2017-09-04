@@ -167,6 +167,10 @@ for /f "tokens=* delims=" %%i in ('type "%temp%\stublistRoot.txt"') do (
   set FUNC=%ppu-objdump% -D %i% | %sed% -f %scripts%\FUNC1.sed -f %scripts%\FUNC1a.sed | %grep% -A1 "^0000000000000000" | %grep% -B1 "^8" | %head% -n 1 | %cut% -b 18- | %sed% -f %scripts%\FUNC3.sed -f %scripts%\FUNC3.sed
   set FNID=%ppu-objdump% -D %i% | %sed% -f %scripts%\FNID1.sed -f %scripts%\FNID1.sed | %grep% -A1 "^0000000000000000" | %grep% "^8" | %cut% -b 4-14 | %sed% -f %scripts%\FNID3.sed
   
+  :: Fill in arguments for awk, may not be correct??
+  set argOne=%FUNC%@
+  set argTwo=0x%FNID%
+  
   :: figure out where getting arg1 and arg2 from??
   set FNIDS=echo "%FUNC%@ 0x%FNID%" | %awk% -F@ "{%print% %argTwo%\"\t\"%argOne%}"
   
