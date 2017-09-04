@@ -36,6 +36,7 @@ set head=%bin%\head.exe
 ::set objdump=%bin%objdump.exe
 set ppu-cppfilt=%bin%\ppu-cppfilt.exe
 set ppu-objdump=%bin%\ppu-objdump.exe
+set print=%bin%\printf.exe
 set sed=%bin%\sed.exe
 set sort=%bin%\sort.exe
 set tclsh=%bin%\tclsh.exe
@@ -207,7 +208,7 @@ echo.
 %sort% FNIDS_temp | %uniq% > FNIDS_temp2
 %rmf% FNIDS_temp
 
-%diff% FNIDS_temp2 FNIDS_xor2  | %grep% -E '^>' | %sed% -f %scripts%\FNIDS.sed | %grep% -vE '^Syscall' | %grep% -vE '^Sysmodule' > FNIDS_temp3
+%diff% FNIDS_temp2 FNIDS_xor2  | %grep% -f %scripts%\FNIDSXOR1.grep | %sed% -f %scripts%\FNIDS.sed | %grep% -vf %scripts%\FNIDSXOR2.grep | %grep% -vf %scripts%\FNIDSXOR2.grep > FNIDS_temp3
 %rmf% FNIDS_xor2
 
 %cat% FNIDS_temp2 FNIDS_temp3 | %sort% | %uniq% > FNIDS
