@@ -52,6 +52,9 @@ set PS3_SDK=c:\usr\local\cell
 set PPU_LIB=%PS3_SDK%\target\ppu\lib
 set SPU_LIB=%PS3_SDK%\target\spu\lib
 
+set argOne=
+set argTwo=
+
 :: Remove old obj folder and create a new one
 if exist obj %rmd% obj
 if not exist obj %mkdir% obj
@@ -163,7 +166,9 @@ for /f "tokens=* delims=" %%i in ('type "%temp%\stublistRoot.txt"') do (
 
   set FUNC=%ppu-objdump% -D %i% | %sed% -f %scripts%\FUNC1.sed -f %scripts%\FUNC1a.sed | %grep% -A1 "^0000000000000000" | %grep% -B1 "^8" | %head% -n 1 | %cut% -b 18- | %sed% -f %scripts%\FUNC3.sed -f %scripts%\FUNC3.sed
   set FNID=%ppu-objdump% -D %i% | %sed% -f %scripts%\FNID1.sed -f %scripts%\FNID1.sed | %grep% -A1 "^0000000000000000" | %grep% "^8" | %cut% -b 4-14 | %sed% -f %scripts%\FNID3.sed
-  set FNIDS=echo "%FUNC%@ 0x%FNID%" | %awk% -F@ '{%print% $2"\t"$1}'
+  
+  :: figure out where getting arg1 and arg2 from??
+  set FNIDS=echo "%FUNC%@ 0x%FNID%" | %awk% -F@ "{%print% %argTwo%\"\t\"%argOne%}"
   
   if not "%FNID%"=="" (
 	
@@ -173,11 +178,11 @@ for /f "tokens=* delims=" %%i in ('type "%temp%\stublistRoot.txt"') do (
 		
 		if "%FUNC%"=="%CPPFUNC%" (
 		
-			echo %i% | %sed% -f %scripts%\CPPFUNC1.sed | %awk% -F_ '{%print% $1"_"$2}' | %sed% -f %scripts%\CPPFUNC2.sed -f %scripts%\CPPFUNC3.sed  %FNIDS% %CPPFUNC%" | %sed% -f %scripts%\CPPFUNC4.sed -f %scripts%\CPPFUNC5.sed -f %scripts%\CPPFUNC6.sed -f %scripts%\CPPFUNC7.sed >> FNIDS_temp
+			echo %i% | %sed% -f %scripts%\CPPFUNC1.sed | %awk% -F_ "{%print% %argOne%\"_\"%argTwo%}" | %sed% -f %scripts%\CPPFUNC2.sed -f %scripts%\CPPFUNC3.sed  %FNIDS% %CPPFUNC%" | %sed% -f %scripts%\CPPFUNC4.sed -f %scripts%\CPPFUNC5.sed -f %scripts%\CPPFUNC6.sed -f %scripts%\CPPFUNC7.sed >> FNIDS_temp
 		
 		) else (
 		
-			 echo %i% | %sed% -f %scripts%\CPPFUNC8.sed -f %scripts%\CPPFUNC9.sed | %awk% -F_ '{%print% $1"_"$2}' | %sed% -f %scripts%\CPPFUNCA.sed -f %scripts%\CPPFUNCB.sed  %FNIDS%" | %sed% -f %scripts%\CPPFUNCC.sed -f %scripts%\CPPFUNCD.sed -f %scripts%\CPPFUNCE.sed -f %scripts%\CPPFUNCF.sed >> FNIDS_temp
+			 echo %i% | %sed% -f %scripts%\CPPFUNC8.sed -f %scripts%\CPPFUNC9.sed | %awk% -F_ "{%print% %argOne%\"_\"%argTwo%}" | %sed% -f %scripts%\CPPFUNCA.sed -f %scripts%\CPPFUNCB.sed  %FNIDS%" | %sed% -f %scripts%\CPPFUNCC.sed -f %scripts%\CPPFUNCD.sed -f %scripts%\CPPFUNCE.sed -f %scripts%\CPPFUNCF.sed >> FNIDS_temp
 		)
 		
 	)
