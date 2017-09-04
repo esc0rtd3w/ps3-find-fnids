@@ -6,7 +6,7 @@
 
 @echo off
 
-title PS3 FNIDS Script          [original script: kakaroto]   [Windows Port by esc0rtd3w 2017]
+title PS3 FNIDS Script      [original script: kakaroto]   [Windows Port by esc0rtd3w 2017]
 
 setlocal enabledelayedexpansion
 
